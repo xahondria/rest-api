@@ -1,3 +1,14 @@
+import * as dotenv from 'dotenv';
+
+const result = dotenv.config();
+
+if (result.error) {
+  console.log('Error loading environment variables, aborting.');
+  process.exit();
+}
+
+console.log(process.env.PORT);
+
 import * as express from 'express';
 import { root } from './routes/root';
 import { isInteger } from './utils';
@@ -23,7 +34,7 @@ function startServer() {
   }
 
   app.listen(port, () => {
-    console.log(`HTTP REST API Server is now running at http://localhost:${port}`);
+    console.log(`HTTP REST API Server is now running at http://localhost:${ port }`);
   });
 }
 
