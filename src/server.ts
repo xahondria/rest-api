@@ -10,6 +10,7 @@ if (result.error) {
 import * as express from 'express';
 import { root } from './routes/root';
 import { isInteger } from './utils';
+import { logger } from './logger';
 
 
 const app = express();
@@ -37,7 +38,7 @@ function startServer() {
   }
 
   app.listen(port, () => {
-    console.log(`HTTP REST API Server is now running at http://localhost:${ port }`);
+    logger.info(`HTTP REST API Server is now running at http://localhost:${ port }`);
   });
 }
 

@@ -1,7 +1,10 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # private files
-.env
+#.env в курсе рекомендуется не добавлять в гит, поспольку там могут быть приватные данные
+
+# logs
+/logs
 
 # compiled output
 /dist
