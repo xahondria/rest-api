@@ -3,7 +3,8 @@ import { logger } from '../logger';
 import { AppDataSource } from '../data-source';
 import { Course } from '../models/course';
 
-export async function getAllCourses(request: Request, response: Response, next: NextFunction) {
+export async function getAllCourses(
+  request: Request, response: Response, next: NextFunction) {
 
   try {
     logger.debug('Called getAllCourses()');
