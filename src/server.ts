@@ -29,7 +29,7 @@ function setupExpress() {
   app.route('/').get(root);
   app.route('/api/courses').get(getAllCourses);
   app.route('/api/courses/:courseUrl').get(findCourseByUrl);
-  app.route('/api/courses/:courseUrl/lessons').get(findLessonsForCourse);
+  app.route('/api/courses/:courseId/lessons').get(findLessonsForCourse);
 
   app.use(defaultErrorHandler);
 
