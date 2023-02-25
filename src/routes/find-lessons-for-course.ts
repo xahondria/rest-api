@@ -21,11 +21,11 @@ export async function findLessonsForCourse(
     }
 
     if (!isInteger(pageNumber)) {
-      throw `Invalid courseId ${ pageNumber }`;
+      throw `Invalid pageNumber ${ pageNumber }`;
     }
 
     if (!isInteger(pageSize)) {
-      throw `Invalid courseId ${ pageSize }`;
+      throw `Invalid pageSize ${ pageSize }`;
     }
 
     const lessons = await AppDataSource
