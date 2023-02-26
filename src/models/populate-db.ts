@@ -4,11 +4,12 @@ const result = dotenv.config();
 
 import 'reflect-metadata';
 
-import { COURSES } from './db-data';
+import { COURSES, USERS } from './db-data';
 import { AppDataSource } from '../data-source';
 import { Course } from './course';
 import { DeepPartial } from 'typeorm';
 import { Lesson } from './lesson';
+import { User } from './user';
 
 async function populateDb() {
 
@@ -36,6 +37,25 @@ async function populateDb() {
 
       await lessonsRepository.save(lesson);
     }
+  }
+
+  const users = Object.values(USERS) as Array<any>;
+
+  for (let userData of users) {
+
+    console.log(`Inserting user ${ userData }`);
+
+    const { email, pictureUrl, isAdmin, passwordSalt, plainTextPassword } = userData;
+
+    AppDataSource
+      .getRepository(User)
+      .create({
+        email,
+        pictureUrl,
+        isAdmin,
+        passwordSalt,
+      })
+
   }
 
   const totalCourses = await courseRepository
