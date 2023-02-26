@@ -16,18 +16,32 @@ export async function createCourse(
       throw 'No data available, cannot save course';
     }
 
-    await AppDataSource.manager.transaction(
+    const course = await AppDataSource.manager.transaction(
       'REPEATABLE READ',
       async (transactionalEntityManager) => {
 
-        const result = transactionalEntityManager
-          .getRepository(Course)
+        const repository = transactionalEntityManager
+          .getRepository(Course);
+
+        const result = await repository
           .createQueryBuilder('courses')
           .select('MAX(courses.seqNo)', 'max')
           .getRawOne();
 
+        const course = repository
+          .create({
+            ...data,
+            seqNo: (result?.max ?? 0) + 1
+          });
+
+        await repository.save(course);
+
+        return course;
+
       }
     );
+
+    response.status(200).json({ course });
 
   } catch (error) {
     logger.error('Error calling createCourse()');
