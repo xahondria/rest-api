@@ -10,6 +10,7 @@ import { Course } from './course';
 import { DeepPartial } from 'typeorm';
 import { Lesson } from './lesson';
 import { User } from './user';
+import { calculatePasswordHash } from '../utils';
 
 async function populateDb() {
 
@@ -47,15 +48,18 @@ async function populateDb() {
 
     const { email, pictureUrl, isAdmin, passwordSalt, plainTextPassword } = userData;
 
-    AppDataSource
+    const user = AppDataSource
       .getRepository(User)
       .create({
         email,
         pictureUrl,
         isAdmin,
         passwordSalt,
-      })
+        passwordHash: await calculatePasswordHash(
+          plainTextPassword, passwordSalt)
+      });
 
+    await AppDataSource.manager.save(user);
   }
 
   const totalCourses = await courseRepository
