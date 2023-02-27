@@ -4,6 +4,8 @@ import { AppDataSource } from '../data-source';
 import { User } from '../models/user';
 import { calculatePasswordHash } from '../utils';
 
+const JWT_SECRET = process.env.JWT_SECRET;
+
 export async function login(
   request: Request, response: Response, next: NextFunction
 ) {
