@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { logger } from '../logger';
 import { AppDataSource } from '../data-source';
 import { User } from '../models/user';
+import { calculatePasswordHash } from '../utils';
 
 export async function login(
   request: Request, response: Response, next: NextFunction
@@ -28,10 +29,31 @@ export async function login(
 
     if (!user) {
       const message = 'Login denied.';
-      logger.error(`${ message } - ${ email }`);
+      logger.info(`${ message } - ${ email }`);
       response.status(403).json({ message });
       return;
     }
+
+    const passwordHash = await calculatePasswordHash(password, user.passwordSalt);
+
+    if (passwordHash !== user.passwordHash) {
+      const message = 'Login denied.';
+      logger.info(`${ message } - user with ${ email } has entered the wrong password.`);
+      response.status(403).json({ message });
+      return;
+    }
+
+    logger.info(`User ${ email } has now logged in.`);
+
+    const { pictureUrl, isAdmin } = user;
+
+    response.status(200).json({
+      user: {
+        email,
+        pictureUrl,
+        isAdmin
+      }
+    });
 
   } catch (error) {
     logger.error('Error calling login()');
